@@ -35,19 +35,19 @@ ifDescr=$(snmpwalk -v 2c -c $community $ip 1.3.6.1.2.1.2.2.1.2 | cut -d' ' -f4 |
 arrDescr=()
 IFS=',' read -r -a arrDescr <<< "$ifDescr"
 
-ifStatus=$(snmpwalk -v 2c -c $community $ip 1.3.6.1.2.1.2.2.1.7 | cut -d' ' -f4 | tr '\n' ',')
-arrStatus=()
-IFS=',' read -r -a arrStatus <<< "$ifStatus"
-
-ifAdminStatus=$(snmpwalk -v 2c -c $community $ip 1.3.6.1.2.1.31.1.1.1.18 | cut -d' ' -f4 | tr '\n' ',')
+ifAdminStatus=$(snmpwalk -v 2c -c $community $ip 1.3.6.1.2.1.2.2.1.7 | cut -d' ' -f4 | tr '\n' ',')
 arrAdminStatus=()
 IFS=',' read -r -a arrAdminStatus <<< "$ifAdminStatus"
 
+ifAlias=$(snmpwalk -v 2c -c $community $ip 1.3.6.1.2.1.31.1.1.1.18 | cut -d' ' -f4 | tr '\n' ',')
+arrAlias=()
+IFS=',' read -r -a arrAlias <<< "$ifAlias"
+
 arr=()
-len=${#arrAdminStatus[@]}
+len=${#arrAlias[@]}
 for (( c=0; c<$len; c++ ));
 do
-    arr+=( ${arrDescr[$c]} ${arrStatus[$c]} ${arrAdminStatus[$c]}\\n)
+    arr+=( ${arrDescr[$c]} ${arrAdminStatus[$c]} ${arrAlias[$c]}\\n)
 done
 printf '=%.0s' {1..30}
 echo -e "\n= $sysName"
